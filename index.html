@@ -196,7 +196,7 @@
     </button>
     <span id="topWing"></span>
     <div class="topbar-text">
-      <div class="topbar-name">AKAI Distributors</div>
+      <div class="topbar-name">AKAI Distributors SO</div>
       <div class="topbar-sub" id="pageSub">New Service Entry</div>
     </div>
   </div>
@@ -207,7 +207,7 @@
 <nav class="panel" id="panel">
   <div class="panel-head">
     <span id="panelWing"></span>
-    <div class="panel-title">AKAI Distributors</div>
+    <div class="panel-title">AKAI Distributors SO</div>
   </div>
   <div class="panel-cap">Pages</div>
   <div class="nav-link active" data-page="receipt">
@@ -455,6 +455,12 @@
       nameMatches=[]; hiIndex=-1; selectedIndex=-1;
       lastSearchedQuery="";
     }
+    // if the box is emptied entirely, also clear the results below
+    if(q.length<1){
+      document.getElementById("tvaResults").innerHTML="";
+      clearStatus("tva");
+      tvaWatch=null; tvaSpares=null; tvaCode="";
+    }
   });
   tvaInput.addEventListener("keydown",function(e){
     if(e.key==="Enter"){
@@ -469,7 +475,6 @@
     if(!tvaDrop.classList.contains("open"))return;
     if(e.key==="ArrowDown"){e.preventDefault();hiIndex=Math.min(hiIndex+1,nameMatches.length-1);renderDrop();}
     else if(e.key==="ArrowUp"){e.preventDefault();hiIndex=Math.max(hiIndex-1,0);renderDrop();}
-    else if(e.key==="Escape"){tvaDrop.classList.remove("open");}
   });
   function runNameSearch(){
     const q=tvaInput.value.trim();
@@ -479,12 +484,6 @@
       nameMatches=list||[]; hiIndex=-1; selectedIndex=-1; lastSearchedQuery=q; renderDrop();
     });
   }
-  document.addEventListener("click",function(e){
-    if(!tvaDrop.contains(e.target) && e.target!==tvaInput){
-      tvaDrop.classList.remove("open");
-    }
-
-  });
 
   function renderDrop(){
     if(!nameMatches.length){
@@ -589,6 +588,12 @@
     const d=new Date();
     document.getElementById("todayDate").textContent=d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"long",year:"numeric"});
     document.getElementById("srfInput").addEventListener("keypress",e=>{if(e.key==="Enter")searchSRF();});
+    document.getElementById("srfInput").addEventListener("input",function(){
+      if(this.value.trim().length<1){
+        document.getElementById("srfResults").innerHTML="";
+        clearStatus("srf");
+      }
+    });
     document.getElementById("rJob").value=JOB_PREFIX;
     document.getElementById("rDate").value=new Date().toISOString().slice(0,10);
     var dl=document.getElementById('rDealerList'); DEALERS.forEach(function(x){var o=document.createElement('option');o.value=x;dl.appendChild(o);});
