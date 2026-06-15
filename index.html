@@ -6,139 +6,178 @@
 <title>AKAI Distributors — Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --slate:#2b4257; --slate-2:#34506a; --slate-dk:#22384b; --slate-ink:#1d2f3f;
-    --amber:#e3a52e; --amber-dk:#c98e1d; --amber-soft:#fbf3e1;
-    --cream:#f6f1e7; --cream-2:#efe7d6;
-    --white:#fff; --off:#f3f0ea; --ink:#27323b; --muted:#7d8896;
-    --border-lt:#e6ddcd;
-    --good:#3f9d6e; --warn:#c08a2a; --bad:#bd5147;
-    --rad-sm:7px; --rad-md:11px; --rad-lg:16px; --rad-xl:22px;
+  :root {
+    --navy:       #0b1829;
+    --navy-2:     #112236;
+    --navy-3:     #1a334d;
+    --teal:       #00bfa5;
+    --teal-dk:    #009e8a;
+    --teal-pale:  rgba(0,191,165,.10);
+    --white:      #ffffff;
+    --off:        #f4f6f9;
+    --ink:        #0d1b2a;
+    --muted:      #6b7c93;
+    --border-lt:  #e2e8f0;
+    --good:#0d9c7e; --warn:#c08a2a; --bad:#b83530;
+    --rad-sm: 6px; --rad-md: 10px; --rad-lg: 16px; --rad-xl: 22px;
   }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  html{font-size:15px;}
-  body{font-family:'Inter',sans-serif;background:var(--off);min-height:100vh;color:var(--ink);}
-  .serif{font-family:'Playfair Display',serif;}
-  .admono{width:42px;height:42px;background:var(--amber);border-radius:var(--rad-sm);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:15px;font-weight:800;color:var(--slate-ink);flex-shrink:0;}
-  .topbar{background:var(--slate);padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:30;}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body { font-family: 'Inter', sans-serif; background: var(--off); min-height: 100vh; color: var(--ink); }
+
+  /* TOPBAR */
+  .topbar { background: var(--navy); padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.06); position:relative; z-index:30; }
   .topbar-left{display:flex;align-items:center;gap:16px;}
-  .topbar-brand{display:flex;align-items:center;gap:13px;}
-  .topbar-text{display:flex;flex-direction:column;gap:1px;}
-  .topbar-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:#fff;letter-spacing:.3px;line-height:1.15;}
-  .topbar-sub{font-size:10.5px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:1.4px;text-transform:uppercase;}
-  .topbar-date{font-size:11.5px;font-weight:500;color:rgba(255,255,255,.4);}
-  .ham{width:40px;height:40px;border:none;background:rgba(255,255,255,.08);border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:background .15s;}
-  .ham:hover{background:rgba(255,255,255,.16);}
+  .topbar-brand { display: flex; align-items: center; gap: 16px; }
+  .topbar-monogram { width: 42px; height: 42px; background: var(--teal); border-radius: var(--rad-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+  .topbar-text { display: flex; flex-direction: column; gap: 1px; }
+  .topbar-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--white); letter-spacing: 0.3px; line-height: 1.2; }
+  .topbar-sub { font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,.35); letter-spacing: 1.2px; text-transform: uppercase; }
+  .topbar-date { font-size: 11.5px; font-weight: 500; color: rgba(255,255,255,.35); letter-spacing: 0.2px; }
+
+  /* hamburger */
+  .ham{width:40px;height:40px;border:none;background:rgba(255,255,255,.07);border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:background .15s;}
+  .ham:hover{background:rgba(255,255,255,.14);}
   .ham span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;}
-  .overlay{position:fixed;inset:0;background:rgba(20,32,44,.45);opacity:0;visibility:hidden;transition:.2s;z-index:40;}
+
+  /* drawer */
+  .overlay{position:fixed;inset:0;background:rgba(8,16,28,.5);opacity:0;visibility:hidden;transition:.2s;z-index:40;}
   .overlay.open{opacity:1;visibility:visible;}
-  .drawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82%;background:#fff;transform:translateX(-100%);transition:transform .24s ease;z-index:50;display:flex;flex-direction:column;box-shadow:4px 0 28px rgba(20,40,60,.18);}
+  .drawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82%;background:#fff;transform:translateX(-100%);transition:transform .24s ease;z-index:50;display:flex;flex-direction:column;box-shadow:4px 0 28px rgba(8,16,28,.25);}
   .drawer.open{transform:translateX(0);}
-  .drawer-head{background:var(--slate);padding:22px 20px;display:flex;align-items:center;gap:12px;}
+  .drawer-head{background:var(--navy);padding:22px 20px;display:flex;align-items:center;gap:12px;}
   .drawer-head .t{display:flex;flex-direction:column;}
-  .drawer-head .t b{font-family:'Playfair Display',serif;color:#fff;font-size:16px;font-weight:800;}
-  .drawer-head .t span{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.5);}
+  .drawer-head .t b{font-family:'Syne',sans-serif;color:#fff;font-size:16px;font-weight:800;}
+  .drawer-head .t span{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,.4);}
   .drawer-nav{padding:12px;flex:1;}
   .nav-item{display:flex;align-items:center;gap:13px;padding:15px 14px;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;border-radius:var(--rad-md);transition:background .12s;margin-bottom:4px;}
   .nav-item:hover{background:var(--off);}
-  .nav-item.active{background:var(--amber-soft);color:var(--amber-dk);}
+  .nav-item.active{background:var(--teal-pale);color:var(--teal-dk);}
   .nav-item svg{flex-shrink:0;}
   .drawer-foot{padding:16px 20px;border-top:1px solid var(--border-lt);font-size:11px;color:var(--muted);}
-  .content{padding:34px 24px 56px;max-width:860px;margin:0 auto;}
+
+  .content { padding: 32px 24px 52px; max-width: 820px; margin:0 auto; }
   .page{display:none;} .page.active{display:block;}
-  .lookup-card{background:linear-gradient(150deg,var(--slate-2) 0%,var(--slate-dk) 100%);border-radius:var(--rad-xl);padding:36px 36px 32px;margin-bottom:24px;position:relative;overflow:hidden;}
-  .lookup-card::after{content:'';position:absolute;top:-90px;right:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(227,165,46,.16) 0%,transparent 70%);pointer-events:none;}
-  .eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:10px;}
-  .lookup-heading{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.15;}
-  .lookup-heading em{color:#fff;font-style:normal;}
-  .lookup-sub{font-size:13.5px;color:rgba(255,255,255,.5);margin-bottom:24px;}
-  .input-row{display:flex;gap:11px;align-items:stretch;position:relative;z-index:1;}
-  .input-wrap{flex:1;position:relative;}
-  .input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.32);pointer-events:none;}
-  .srf-input{width:100%;height:52px;padding:0 16px 0 46px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.13);border-radius:var(--rad-md);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;outline:none;transition:border-color .2s,background .2s;letter-spacing:.4px;}
-  .srf-input::placeholder{color:rgba(255,255,255,.3);font-weight:400;}
-  .srf-input:focus{border-color:var(--amber);background:rgba(255,255,255,.11);}
-  .btn-lookup{height:52px;padding:0 28px;background:var(--amber);color:var(--slate-ink);font-size:13.5px;font-weight:700;border:none;border-radius:30px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .15s,transform .1s;white-space:nowrap;flex-shrink:0;letter-spacing:.3px;}
-  .btn-lookup:hover{background:var(--amber-dk);}
-  .btn-lookup:active{transform:scale(.97);}
-  .hint-line{margin-top:12px;font-size:11.5px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px;position:relative;z-index:1;}
-  .name-drop{position:absolute;left:0;right:0;top:56px;background:#fff;border:1px solid var(--border-lt);border-radius:var(--rad-md);box-shadow:0 12px 30px rgba(20,40,60,.18);max-height:260px;overflow-y:auto;display:none;z-index:20;}
-  .name-drop.open{display:block;}
-  .name-opt{padding:12px 16px;font-size:14px;color:var(--ink);cursor:pointer;border-bottom:1px solid var(--border-lt);}
-  .name-opt:last-child{border-bottom:none;}
-  .name-opt:hover,.name-opt.hi{background:var(--amber-soft);}
+
+  /* LOOKUP / HERO CARD */
+  .lookup-card { background: var(--navy); border-radius: var(--rad-xl); padding: 30px 32px; margin-bottom: 26px; position: relative; overflow: hidden; }
+  .lookup-card::after { content:''; position:absolute; top:-80px; right:-80px; width:260px; height:260px; border-radius:50%; background:radial-gradient(circle,rgba(0,191,165,.12) 0%,transparent 68%); pointer-events:none; }
+  .lookup-heading { font-family: 'Syne', sans-serif; font-size: 21px; font-weight: 800; color: var(--white); margin-bottom: 3px; }
+  .lookup-sub { font-size: 13px; color: rgba(255,255,255,.38); margin-bottom: 22px; }
+  .input-row { display: flex; gap: 10px; align-items: stretch; position: relative; z-index: 1; }
+  .input-wrap { flex: 1; position: relative; }
+  .input-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.28); pointer-events: none; }
+  .srf-input { width: 100%; height: 50px; padding: 0 16px 0 46px; background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.11); border-radius: var(--rad-md); color: var(--white); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; outline: none; transition: border-color .2s, background .2s; letter-spacing: 0.4px; }
+  .srf-input::placeholder { color: rgba(255,255,255,.22); font-weight: 400; }
+  .srf-input:focus { border-color: var(--teal); background: rgba(255,255,255,.09); }
+  .btn-lookup { height: 50px; padding: 0 26px; background: var(--teal); color: var(--navy); font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 700; border: none; border-radius: var(--rad-md); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; letter-spacing: 0.3px; transition: background .15s, transform .1s; white-space: nowrap; flex-shrink: 0; }
+  .btn-lookup:hover { background: var(--teal-dk); }
+  .btn-lookup:active { transform: scale(.97); }
+  .hint-line { margin-top: 11px; font-size: 11.5px; color: rgba(255,255,255,.22); display: flex; align-items: center; gap: 5px; position: relative; z-index: 1; }
+
+  /* Name dropdown panel — sits BELOW the lookup card, not inside the input */
+  .name-drop-panel{display:none;background:#fff;border:1px solid var(--border-lt);border-radius:var(--rad-xl);box-shadow:0 8px 26px rgba(8,16,28,.10);max-height:300px;overflow-y:auto;margin-bottom:26px;}
+  .name-drop-panel.open{display:block;animation:up .18s ease both;}
+  .name-drop-panel .ndp-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:14px 20px 6px;}
+  .name-opt{padding:12px 20px;font-size:14px;color:var(--ink);cursor:pointer;border-top:1px solid var(--border-lt);}
+  .name-opt:hover,.name-opt.hi{background:var(--off);}
   .name-opt small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;}
-  .status-strip{display:none;align-items:center;gap:11px;padding:12px 16px;border-radius:var(--rad-md);font-size:13px;font-weight:500;margin-bottom:18px;border:1px solid transparent;}
-  .status-strip.loading{display:flex;background:var(--amber-soft);color:var(--amber-dk);border-color:rgba(227,165,46,.3);}
-  .status-strip.error{display:flex;background:#fbeeec;color:#b04339;border-color:rgba(189,81,71,.2);}
-  .spinner{width:15px;height:15px;border:2px solid rgba(201,142,29,.25);border-top-color:var(--amber-dk);border-radius:50%;animation:spin .65s linear infinite;flex-shrink:0;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .seg{display:inline-flex;background:var(--slate-dk);border-radius:30px;padding:4px;margin-bottom:18px;}
-  .seg button{border:none;background:transparent;color:rgba(255,255,255,.55);font-size:16px;font-weight:700;padding:11px 30px;border-radius:30px;cursor:pointer;letter-spacing:.4px;transition:.15s;display:flex;align-items:center;gap:8px;}
-  .seg button svg{width:17px;height:17px;}
-  .seg button.active{background:var(--amber);color:var(--slate-ink);}
-  .results-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;flex-wrap:wrap;gap:10px;}
-  .results-label{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);}
-  .srf-chip{display:inline-flex;align-items:center;gap:6px;background:var(--slate);color:var(--amber);font-size:11.5px;font-weight:700;padding:6px 15px;border-radius:30px;letter-spacing:.5px;}
-  .result-card{background:var(--cream);border-radius:var(--rad-xl);border:1px solid var(--border-lt);overflow:hidden;margin-bottom:18px;animation:up .22s ease both;}
-  @keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  .disclaimer{padding:15px 24px 20px;font-size:12px;color:var(--muted);text-align:center;font-style:italic;}
-  .dealer-strip{background:var(--cream-2);padding:19px 24px;border-bottom:1px solid var(--border-lt);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+  /* STATUS */
+  .status-strip { display: none; align-items: center; gap: 11px; padding: 11px 16px; border-radius: var(--rad-md); font-size: 13px; font-weight: 500; margin-bottom: 18px; border: 1px solid transparent; }
+  .status-strip.loading { display: flex; background: #e8f9f7; color: #007a63; border-color: rgba(0,191,165,.2); }
+  .status-strip.error   { display: flex; background: #fdf1f0; color: #b83530; border-color: rgba(184,53,48,.15); }
+  .spinner { width: 15px; height: 15px; border: 2px solid rgba(0,122,99,.2); border-top-color: #007a63; border-radius: 50%; animation: spin .65s linear infinite; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* RESULTS META */
+  .results-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap:wrap; gap:10px; }
+  .results-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+  .srf-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: var(--teal); font-size: 11.5px; font-weight: 700; padding: 5px 14px; border-radius: 30px; letter-spacing: 0.5px; }
+
+  /* RESULT CARD (service query — exact styling) */
+  .result-card { background: var(--white); border-radius: var(--rad-xl); border: 1px solid var(--border-lt); overflow: hidden; margin-bottom: 18px; animation: up .22s ease both; }
+  .rcard-header { background: var(--navy); padding: 15px 22px; display: flex; align-items: center; justify-content: space-between; }
+  .rcard-header-left { display: flex; align-items: center; gap: 10px; }
+  .rcard-icon { width: 30px; height: 30px; background: var(--teal-pale); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+  .rcard-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.55); }
+  .rcard-count { font-size: 11px; font-weight: 700; background: rgba(255,255,255,.07); color: rgba(255,255,255,.4); padding: 3px 10px; border-radius: 20px; }
+  .sec-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); padding: 11px 22px 8px; background: var(--off); border-top: 1px solid var(--border-lt); border-bottom: 1px solid var(--border-lt); display: flex; align-items: center; gap: 6px; }
+  .field-row { display: grid; grid-template-columns: 148px 1fr; align-items: center; padding: 11px 22px; border-bottom: 1px solid var(--border-lt); gap: 14px; }
+  .field-row:last-child { border-bottom: none; }
+  .field-row:hover { background: #f9fbfd; }
+  .f-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .f-val { font-size: 13.5px; font-weight: 600; color: var(--ink); word-break: break-word; }
+  .f-val.accent { color: var(--teal-dk); }
+  .f-val.empty { color: #c5cdd8; font-weight: 400; font-size: 13px; }
+  .pill { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.3px; }
+  .pill-yes { background: #e6f7f3; color: #007a5e; }
+  .pill-no  { background: #fdf0ee; color: #b83530; }
+  .pill-na  { background: #f0f3f6; color: #94a3b8; }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 68px 24px; background: var(--white); border-radius: var(--rad-xl); border:1px solid var(--border-lt); }
+  .empty-icon-wrap { width: 68px; height: 68px; border-radius: 16px; background: var(--navy); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .empty-title { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; color: var(--ink); margin-bottom: 9px; }
+  .empty-sub { font-size: 13px; color: var(--muted); max-width: 290px; margin: 0 auto; line-height: 1.85; }
+
+  /* TVA segmented + table */
+  .seg{display:inline-flex;background:var(--navy-2);border-radius:30px;padding:4px;margin-bottom:18px;}
+  .seg button{border:none;background:transparent;color:rgba(255,255,255,.5);font-size:15px;font-weight:700;padding:10px 26px;border-radius:30px;cursor:pointer;letter-spacing:.4px;transition:.15s;display:flex;align-items:center;gap:8px;}
+  .seg button svg{width:16px;height:16px;}
+  .seg button.active{background:var(--teal);color:var(--navy);}
+  .dealer-strip{background:var(--off);padding:18px 22px;border-bottom:1px solid var(--border-lt);display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
   .dealer-strip .field span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin-bottom:4px;font-weight:700;}
-  .dealer-strip .field b{font-size:15px;color:var(--slate-ink);font-weight:600;word-break:break-word;}
+  .dealer-strip .field b{font-size:15px;color:var(--ink);font-weight:700;word-break:break-word;}
   .tbl-wrap{padding:7px;}
   table.tva{width:100%;border-collapse:collapse;font-size:13.5px;}
-  table.tva thead th{background:var(--slate-2);color:#fff;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:13px 8px;text-align:center;}
+  table.tva thead th{background:var(--navy-2);color:#fff;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:13px 8px;text-align:center;}
   table.tva thead th:first-child{text-align:left;border-radius:9px 0 0 0;}
   table.tva thead th:last-child{border-radius:0 9px 0 0;}
   table.tva tbody td{padding:13px 8px;border-bottom:1px solid var(--border-lt);text-align:center;color:var(--ink);background:#fff;}
-  table.tva tbody td:first-child{text-align:left;font-weight:600;color:var(--slate-ink);}
-  table.tva tbody tr:hover td{background:#fbf8f1;}
+  table.tva tbody td:first-child{text-align:left;font-weight:600;color:var(--ink);}
+  table.tva tbody tr:hover td{background:#f9fbfd;}
   .bar{position:relative;height:7px;width:62px;margin:5px auto 0;background:var(--border-lt);border-radius:6px;overflow:hidden;}
   .bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;}
   .pct-txt{font-weight:700;font-size:13px;}
-  .total-row td{background:var(--amber-soft)!important;border-top:2px solid var(--amber);font-weight:800;color:var(--slate-ink);font-size:14px;padding:16px 8px;}
-  .total-row td:last-child{color:var(--amber-dk);}
-  .empty-state{text-align:center;padding:70px 24px;background:var(--cream);border-radius:var(--rad-xl);border:1px solid var(--border-lt);}
-  .empty-icon-wrap{width:70px;height:70px;border-radius:16px;background:var(--slate);display:inline-flex;align-items:center;justify-content:center;margin-bottom:18px;}
-  .empty-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--ink);margin-bottom:9px;}
-  .empty-sub{font-size:13px;color:var(--muted);max-width:300px;margin:0 auto;line-height:1.85;}
-  .svc-grid{padding:7px;}
-  .svc-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border-lt);}
-  .svc-cell{background:#fff;padding:13px 16px;}
-  .svc-cell span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700;margin-bottom:3px;}
-  .svc-cell b{font-size:14.5px;color:var(--slate-ink);font-weight:600;word-break:break-word;}
-  .form-card{background:var(--cream);border-radius:var(--rad-xl);border:1px solid var(--border-lt);overflow:hidden;}
+  .total-row td{background:var(--teal-pale)!important;border-top:2px solid var(--teal);font-weight:800;color:var(--ink);font-size:14px;padding:16px 8px;}
+  .total-row td:last-child{color:var(--teal-dk);}
+  .disclaimer{padding:15px 24px 20px;font-size:12px;color:var(--muted);text-align:center;font-style:italic;}
+
+  /* FORM (default page) */
+  .form-card{background:var(--white);border-radius:var(--rad-xl);border:1px solid var(--border-lt);overflow:hidden;}
   .form-body{padding:26px 28px;}
   .fld{margin-bottom:18px;}
-  .fld label{display:block;font-weight:700;font-size:12.5px;letter-spacing:.4px;color:var(--slate-ink);margin-bottom:7px;text-transform:uppercase;}
+  .fld label{display:block;font-weight:700;font-size:12px;letter-spacing:.5px;color:var(--ink);margin-bottom:7px;text-transform:uppercase;}
   .fld label .req{color:var(--bad);}
   .fld input{width:100%;padding:13px 15px;border:1px solid var(--border-lt);border-radius:var(--rad-md);font-size:15px;background:#fff;color:var(--ink);font-family:'Inter',sans-serif;transition:.15s;}
-  .fld input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(227,165,46,.16);}
-  .fld input[readonly]{background:#efe7d6;color:var(--muted);cursor:not-allowed;letter-spacing:.5px;}
-  .btn-submit{width:100%;padding:15px;background:var(--amber);color:var(--slate-ink);border:none;border-radius:var(--rad-md);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:.15s;}
-  .btn-submit:hover{background:var(--amber-dk);}
+  .fld input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,191,165,.14);}
+  .fld input[readonly]{background:var(--off);color:var(--muted);cursor:not-allowed;letter-spacing:.5px;}
+  .btn-submit{width:100%;padding:15px;background:var(--teal);color:var(--navy);border:none;border-radius:var(--rad-md);font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:.15s;}
+  .btn-submit:hover{background:var(--teal-dk);}
   .btn-submit:disabled{opacity:.6;cursor:default;}
   .form-msg{margin-top:16px;padding:13px 15px;border-radius:var(--rad-md);font-weight:600;font-size:14px;display:none;}
-  .form-msg.ok{background:var(--amber-soft);color:var(--good);display:block;}
-  .form-msg.err{background:#fbe9e8;color:var(--bad);display:block;}
-  @media(max-width:700px){
-    .topbar{padding:0 14px;height:64px;}
-    .topbar-name{font-size:15px;}
-    .content{padding:20px 16px 40px;}
-    .lookup-card{padding:24px 18px;}
-    .lookup-heading{font-size:24px;}
-    .input-row{flex-direction:column;}
-    .btn-lookup{width:100%;justify-content:center;}
+  .form-msg.ok{background:var(--teal-pale);color:var(--good);display:block;}
+  .form-msg.err{background:#fdf1f0;color:var(--bad);display:block;}
+
+  @media (max-width: 700px) {
+    .topbar { padding: 0 14px; height: 64px; }
+    .topbar-monogram { width: 36px; height: 36px; font-size: 13px; }
+    .topbar-name { font-size: 14px; }
+    .content { padding: 20px 16px 40px; }
+    .lookup-card { padding: 22px 18px; }
+    .input-row { flex-direction: column; }
+    .btn-lookup { width: 100%; justify-content: center; }
+    .field-row { grid-template-columns: 105px 1fr; }
     .dealer-strip{grid-template-columns:1fr;gap:10px;}
     table.tva{font-size:12.5px;}
     table.tva thead th{padding:10px 4px;}
     table.tva tbody td{padding:10px 4px;}
     .bar{width:46px;}
     .seg button{font-size:14px;padding:10px 22px;}
-    .svc-row{grid-template-columns:1fr;}
     .form-body{padding:20px 18px;}
   }
 </style>
@@ -156,10 +195,10 @@
   <div class="topbar-left">
     <button class="ham" id="hamBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="topbar-brand">
-      <div class="admono">AD</div>
+      <div class="topbar-monogram">AD</div>
       <div class="topbar-text">
         <div class="topbar-name">AKAI Distributors</div>
-        <div class="topbar-sub" id="topSub">Service Portal</div>
+        <div class="topbar-sub" id="topSub">New Service Entry</div>
       </div>
     </div>
   </div>
@@ -169,21 +208,21 @@
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
   <div class="drawer-head">
-    <div class="admono">AD</div>
+    <div class="topbar-monogram">AD</div>
     <div class="t"><b>AKAI Distributors</b><span>Navigation</span></div>
   </div>
   <nav class="drawer-nav">
-    <div class="nav-item active" data-page="service" onclick="gotoPage('service')">
+    <div class="nav-item active" data-page="receipt" onclick="gotoPage('receipt')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      New Service Entry
+    </div>
+    <div class="nav-item" data-page="service" onclick="gotoPage('service')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      Service Lookup
+      Service Query
     </div>
     <div class="nav-item" data-page="tva" onclick="gotoPage('tva')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
       Target Vs Achievement
-    </div>
-    <div class="nav-item" data-page="receipt" onclick="gotoPage('receipt')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
-      New Service Entry
     </div>
   </nav>
   <div class="drawer-foot">© AKAI Distributors</div>
@@ -191,47 +230,10 @@
 
 <div class="content">
 
-  <div class="page active" id="page-service">
+  <!-- ══════════ DEFAULT PAGE: NEW SERVICE ENTRY ══════════ -->
+  <div class="page active" id="page-receipt">
     <div class="lookup-card">
-      <div class="eyebrow">Service Records</div>
-      <div class="lookup-heading serif">Service <em>Lookup</em></div>
-      <div class="lookup-sub">Enter an SRF number to view its service record.</div>
-      <div class="input-row">
-        <div class="input-wrap">
-          <div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-          <input type="text" id="svcInput" class="srf-input" placeholder="Enter SRF number…" autocomplete="off" spellcheck="false">
-        </div>
-        <button class="btn-lookup" onclick="searchService()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Look Up</button>
-      </div>
-      <div class="hint-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Press Enter or click Look Up to search</div>
-    </div>
-    <div class="status-strip" id="svcStatus"><div class="spinner" id="svcSpinner"></div><span id="svcStatusMsg">Searching…</span></div>
-    <div id="svcResults"></div>
-  </div>
-
-  <div class="page" id="page-tva">
-    <div class="lookup-card">
-      <div class="eyebrow">Performance Dashboard</div>
-      <div class="lookup-heading serif">Target <em>Vs</em> Achievement</div>
-      <div class="lookup-sub" id="tvaMonth">Loading month target…</div>
-      <div class="input-row">
-        <div class="input-wrap">
-          <div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-          <input type="text" id="tvaInput" class="srf-input" placeholder="Type dealer name…" autocomplete="off" spellcheck="false">
-          <div class="name-drop" id="tvaDrop"></div>
-        </div>
-        <button class="btn-lookup" onclick="manualSearchTVA()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Look Up</button>
-      </div>
-      <div class="hint-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Start typing a name and pick from the list</div>
-    </div>
-    <div class="status-strip" id="tvaStatus"><div class="spinner" id="tvaSpinner"></div><span id="tvaStatusMsg">Searching…</span></div>
-    <div id="tvaResults"></div>
-  </div>
-
-  <div class="page" id="page-receipt">
-    <div class="lookup-card">
-      <div class="eyebrow">Service Intake</div>
-      <div class="lookup-heading serif">New Service <em>Entry</em></div>
+      <div class="lookup-heading">New Service Entry</div>
       <div class="lookup-sub">Submit a new service receipt. It is sent for approval before recording.</div>
     </div>
     <div class="form-card">
@@ -259,6 +261,59 @@
     </div>
   </div>
 
+  <!-- ══════════ SERVICE QUERY (SRF lookup, exact styling) ══════════ -->
+  <div class="page" id="page-service">
+    <div class="lookup-card">
+      <div class="lookup-heading">Find a Service Query</div>
+      <div class="lookup-sub">Enter the SRF number.</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <input type="text" id="svcInput" class="srf-input" placeholder="Enter SRF Number…" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn-lookup" onclick="searchService()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Look Up
+        </button>
+      </div>
+      <div class="hint-line">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Press Enter or click Look Up to search
+      </div>
+    </div>
+    <div class="status-strip" id="svcStatus"><div class="spinner" id="svcSpinner"></div><span id="svcStatusMsg">Searching…</span></div>
+    <div id="svcResults"></div>
+  </div>
+
+  <!-- ══════════ TARGET VS ACHIEVEMENT ══════════ -->
+  <div class="page" id="page-tva">
+    <div class="lookup-card">
+      <div class="lookup-heading">Target Vs Achievement</div>
+      <div class="lookup-sub" id="tvaMonth">Loading month target…</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <input type="text" id="tvaInput" class="srf-input" placeholder="Type dealer name…" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn-lookup" onclick="manualSearchTVA()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Look Up
+        </button>
+      </div>
+      <div class="hint-line">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Type a dealer name and choose from the list below
+      </div>
+    </div>
+
+    <div class="name-drop-panel" id="tvaDrop">
+      <div class="ndp-label">Matching Dealers</div>
+    </div>
+
+    <div class="status-strip" id="tvaStatus"><div class="spinner" id="tvaSpinner"></div><span id="tvaStatusMsg">Searching…</span></div>
+    <div id="tvaResults"></div>
+  </div>
+
 </div>
 
 <script>
@@ -274,6 +329,8 @@
     s.onerror=function(){cb(null);try{document.body.removeChild(s);}catch(e){}};
     document.body.appendChild(s);
   }
+
+  /* drawer / page nav */
   const hamBtn=document.getElementById("hamBtn"), drawer=document.getElementById("drawer"), overlay=document.getElementById("overlay");
   function openDrawer(){drawer.classList.add("open");overlay.classList.add("open");}
   function closeDrawer(){drawer.classList.remove("open");overlay.classList.remove("open");}
@@ -283,47 +340,90 @@
     document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
     document.getElementById("page-"+p).classList.add("active");
     document.querySelectorAll(".nav-item").forEach(m=>m.classList.toggle("active",m.dataset.page===p));
-    document.getElementById("topSub").textContent = (p==="tva") ? "Target Vs Achievement" : (p==="receipt") ? "New Service Entry" : "Service Portal";
+    document.getElementById("topSub").textContent = (p==="tva") ? "Target Vs Achievement" : (p==="service") ? "Service Query" : "New Service Entry";
     closeDrawer();
     if(p==="tva" && !tvaMonthLoaded) loadMonth();
   }
 
+  /* ════════ SERVICE QUERY (exact behavior/styling from provided file, via jsonp + SERVICE_URL, SRF from column A) ════════ */
   function setSvcStatus(type,msg){const el=document.getElementById("svcStatus");el.className="status-strip "+type;document.getElementById("svcStatusMsg").textContent=msg;document.getElementById("svcSpinner").style.display=(type==="loading")?"block":"none";}
   function clearSvcStatus(){document.getElementById("svcStatus").className="status-strip";}
+
+  function pill(v){
+    if(!v)return'<span class="pill pill-na">—</span>';
+    const l=String(v).trim().toLowerCase();
+    if(l==="yes"||l==="true"||l==="1")return'<span class="pill pill-yes">Yes</span>';
+    if(l==="no"||l==="false"||l==="0")return'<span class="pill pill-no">No</span>';
+    return'<span class="f-val">'+esc(v)+'</span>';
+  }
+  function fval(v,cls){
+    const s=esc(v);
+    if(!s)return'<span class="f-val empty">—</span>';
+    return'<span class="f-val'+(cls?' '+cls:'')+'">'+s+'</span>';
+  }
+
   function searchService(){
     const inp=document.getElementById("svcInput"); const code=inp.value.trim();
-    if(!code){inp.focus();inp.style.borderColor="rgba(189,81,71,.8)";setTimeout(()=>inp.style.borderColor="",1400);return;}
+    if(!code){inp.focus();inp.style.borderColor="rgba(184,53,48,.8)";setTimeout(()=>inp.style.borderColor="",1400);return;}
     if(!isSet(SERVICE_URL)){setSvcStatus("error","Configuration error: SERVICE_URL not set in the file.");return;}
     setSvcStatus("loading","Searching for SRF "+code+"…");
     document.getElementById("svcResults").innerHTML="";
     jsonp(SERVICE_URL,{code:code},function(res){
       clearSvcStatus();
-      if(!res || res.status!=="ok" || !res.results || !res.results.length){ renderSvcEmpty(code); return; }
-      renderSvc(res.results,code);
+      const data = res && res.results ? res.results : [];
+      const status = res ? (res.status||"not_found") : "not_found";
+      if(status!=="ok" || data.length===0){ renderSvcEmpty(code); return; }
+      renderSvc(data,code);
     });
-  }
-  function renderSvcEmpty(code){
-    document.getElementById("svcResults").innerHTML=`<div class="empty-state"><div class="empty-icon-wrap"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="empty-title serif">No Record Found</div><div class="empty-sub">No service record matches SRF "${esc(code)}". Please verify and try again.</div></div>`;
-  }
-  function svcField(label,val){return `<div class="svc-cell"><span>${label}</span><b>${esc(val||"—")}</b></div>`;}
-  function renderSvc(results,code){
-    let cards="";
-    results.forEach(r=>{
-      cards+=`<div class="result-card"><div class="dealer-strip">
-          <div class="field"><span>SRF</span><b>${esc(r.SRF||code)}</b></div>
-          <div class="field"><span>Dealer</span><b>${esc(r.Dealer||r.DealerName||"—")}</b></div>
-          <div class="field"><span>Date</span><b>${esc(r.Date||"—")}</b></div></div>
-        <div class="svc-grid"><div class="svc-row">
-          ${svcField("Salesman",r.Salesman)}${svcField("D.O.P",r.DOP)}${svcField("Variant",r.Variant)}${svcField("Complain",r.Complain)}
-          ${svcField("Job Offer",r.JobOffer)}${svcField("Dispatch",r.Dispatch)}${svcField("Receive",r.Receive||r.Received)}${svcField("Charge",r.Charge)}
-          ${svcField("Delivery",r.Delivery||r.Delivered)}${svcField("Paid",r.Paid)}${svcField("WRA Amt",r.WraAmt)}${svcField("WRA Watch",r.WraWatch)}
-          ${svcField("Amount",r.Amount)}${svcField("Diff Amount",r.DiffAmt)}
-        </div></div><div class="disclaimer">Disclaimer: data is entered manually and may vary.</div></div>`;
-    });
-    const meta=`<div class="results-meta"><div class="results-label">Service Record${results.length>1?'s':''}</div><span class="srf-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>${esc(code)}</span></div>`;
-    document.getElementById("svcResults").innerHTML=meta+cards;
   }
 
+  function renderSvcEmpty(code){
+    document.getElementById("svcResults").innerHTML=`<div class="empty-state">
+      <div class="empty-icon-wrap"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+      <div class="empty-title">No Record Found</div>
+      <div class="empty-sub">No service record matches that SRF number. Please verify the number and try again, or contact your service centre.</div>
+    </div>`;
+  }
+
+  function renderSvc(data,code){
+    let html=`<div class="results-meta">
+      <div class="results-label">${data.length} record${data.length>1?"s":""} found</div>
+      <div class="srf-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>SRF ${esc(code)}</div>
+    </div>`;
+
+    data.forEach((item,i)=>{
+      const dealer = item.DealerName || item.Dealer;
+      const received = item.Received || item.Receive;
+      const delivered = item.Delivered || item.Delivery;
+      html+=`<div class="result-card" style="animation-delay:${i*55}ms">
+        <div class="rcard-header">
+          <div class="rcard-header-left">
+            <div class="rcard-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00bfa5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="rcard-title">Service Record</div>
+          </div>
+          <div class="rcard-count">Entry ${i+1} of ${data.length}</div>
+        </div>
+        <div class="sec-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Customer &amp; Dealer Info</div>
+        <div class="field-row"><div class="f-label">Date</div>${fval(item.Date,"accent")}</div>
+        <div class="field-row"><div class="f-label">Dealer Name</div>${fval(dealer)}</div>
+        <div class="field-row"><div class="f-label">Salesman</div>${fval(item.Salesman)}</div>
+        <div class="field-row"><div class="f-label">Date of Purchase</div>${fval(item.DOP)}</div>
+        <div class="field-row"><div class="f-label">Variant</div>${fval(item.Variant)}</div>
+        <div class="sec-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Service Details</div>
+        <div class="field-row"><div class="f-label">Complaint</div>${fval(item.Complain)}</div>
+        <div class="field-row"><div class="f-label">Job Offered</div>${fval(item.JobOffer)}</div>
+        <div class="sec-lbl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Status</div>
+        <div class="field-row"><div class="f-label">Received</div>${fval(received)}</div>
+        <div class="field-row"><div class="f-label">Charge</div>${fval(item.Charge)}</div>
+        <div class="field-row"><div class="f-label">Delivered</div>${fval(delivered)}</div>
+        <div class="field-row"><div class="f-label">Paid</div>${fval(item.Paid)}</div>
+      </div>`;
+    });
+
+    document.getElementById("svcResults").innerHTML=html;
+  }
+
+  /* ════════ TARGET VS ACHIEVEMENT ════════ */
   const WATCH_BRANDS=["Titan","Sonata","Fastrack","Wakeup","Wonder","Clock","Lab","Edge"];
   let tvaMonthValue="", tvaMonthLoaded=false;
   let tvaMode="watches"; let tvaWatch=null, tvaSpares=null, tvaCode="";
@@ -335,11 +435,12 @@
     if(!isSet(TVA_URL)){document.getElementById("tvaMonth").textContent="Set TVA_URL in the file to load data.";return;}
     jsonp(TVA_URL,{fn:"getMonthTarget",arg:""},function(val){ tvaMonthValue=val||"—"; document.getElementById("tvaMonth").textContent="Target for the month: "+tvaMonthValue; });
   }
+
   const tvaInput=document.getElementById("tvaInput"), tvaDrop=document.getElementById("tvaDrop");
   let nameTimer=null;
   tvaInput.addEventListener("input",function(){
     const q=tvaInput.value.trim(); clearTimeout(nameTimer);
-    if(q.length<1){ tvaDrop.classList.remove("open"); tvaDrop.innerHTML=""; nameMatches=[]; hiIndex=-1; return; }
+    if(q.length<1){ tvaDrop.classList.remove("open"); nameMatches=[]; hiIndex=-1; renderDrop(); return; }
     if(!isSet(TVA_URL)){setTvaStatus("error","Configuration error: TVA_URL not set in the file.");return;}
     nameTimer=setTimeout(function(){ jsonp(TVA_URL,{fn:"searchNames",arg:q},function(list){ nameMatches=list||[]; hiIndex=-1; renderDrop(); }); },200);
   });
@@ -350,18 +451,30 @@
     else if(e.key==="Enter"){e.preventDefault();if(hiIndex>=0&&nameMatches[hiIndex])pickName(hiIndex);}
     else if(e.key==="Escape"){tvaDrop.classList.remove("open");}
   });
+  document.addEventListener("click",function(e){
+    if(!tvaDrop.contains(e.target) && e.target!==tvaInput){
+      tvaDrop.classList.remove("open");
+    }
+  });
+
   function renderDrop(){
-    if(!nameMatches.length){ tvaDrop.innerHTML=`<div class="name-opt" style="color:var(--muted);cursor:default">No matching dealer name</div>`; tvaDrop.classList.add("open"); return; }
-    tvaDrop.innerHTML=nameMatches.map((m,i)=>`<div class="name-opt ${i===hiIndex?'hi':''}" onclick="pickName(${i})">${esc(m.name)}<small>Code: ${esc(m.code)}${m.town?' • '+esc(m.town):''}</small></div>`).join("");
+    if(!nameMatches.length){
+      tvaDrop.classList.remove("open");
+      tvaDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`;
+      return;
+    }
+    tvaDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`+
+      nameMatches.map((m,i)=>`<div class="name-opt ${i===hiIndex?'hi':''}" onclick="pickName(${i})">${esc(m.name)}<small>Code: ${esc(m.code)}${m.town?' • '+esc(m.town):''}</small></div>`).join("");
     tvaDrop.classList.add("open");
   }
   function pickName(i){
     const m=nameMatches[i]; if(!m)return;
-    tvaInput.value=m.name;
+    tvaInput.value=m.name; // search box shows only the typed/selected name
     loadRow(m.row,m.code);
-    // dropdown stays open — do not close it here
+    // dropdown panel stays open below for continued switching
   }
   function manualSearchTVA(){ if(nameMatches.length){ pickName(hiIndex>=0?hiIndex:0); } else { tvaInput.focus(); } }
+
   function loadRow(row,code){
     tvaCode=code; tvaWatch=null; tvaSpares=null;
     setTvaStatus("loading","Loading data…");
@@ -380,7 +493,7 @@
   }
   function pctColor(p){if(p>=90)return"var(--good)";if(p>=60)return"var(--warn)";return"var(--bad)";}
   function renderTVAEmpty(){
-    document.getElementById("tvaResults").innerHTML=`<div class="empty-state"><div class="empty-icon-wrap"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="empty-title serif">No Data Found</div><div class="empty-sub">No record matches that selection. Please try another name.</div></div>`;
+    document.getElementById("tvaResults").innerHTML=`<div class="empty-state"><div class="empty-icon-wrap"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="empty-title">No Data Found</div><div class="empty-sub">No record matches that selection. Please try another name.</div></div>`;
   }
   function dealerStrip(d){
     return `<div class="dealer-strip"><div class="field"><span>Code</span><b>${esc(d.code)}</b></div><div class="field"><span>Dealer</span><b>${esc(d.dealer)}</b></div><div class="field"><span>Town</span><b>${esc(d.town)}</b></div></div>`;
@@ -392,10 +505,10 @@
     if(tvaMode==="watches") body=watchesTable(base);
     else{
       if(tvaSpares===null) body="<div class='empty-state'><div class='empty-sub'>Loading spares…</div></div>";
-      else if(!tvaSpares) body=`<div class="empty-state"><div class="empty-title serif">No Spares Data</div><div class="empty-sub">No spares record matches this dealer code.</div></div>`;
+      else if(!tvaSpares) body=`<div class="empty-state"><div class="empty-title">No Spares Data</div><div class="empty-sub">No spares record matches this dealer code.</div></div>`;
       else body=sparesTable(tvaSpares);
     }
-    const meta=`<div class="results-meta"><div class="results-label">${tvaMode==='watches'?'Watches':'Spares'} — Target Vs Achievement</div><span class="srf-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>${esc(tvaCode)}</span></div>`;
+    const meta=`<div class="results-meta"><div class="results-label">${tvaMode==='watches'?'Watches':'Spares'} — Target Vs Achievement</div><div class="srf-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>${esc(tvaCode)}</div></div>`;
     document.getElementById("tvaResults").innerHTML=meta+seg+`<div class="result-card">${dealerStrip(base)}${body}<div class="disclaimer">Disclaimer: data is entered manually and may vary.</div></div>`;
   }
   function watchesTable(d){
@@ -417,6 +530,7 @@
     return `<div class="tbl-wrap"><table class="tva"><thead><tr><th>Target</th><th>Battery Achvd</th><th>Spares Achvd</th><th>Remaining</th><th>%</th></tr></thead><tbody><tr><td style="text-align:center;font-weight:700">${target}</td><td>${batt}</td><td>${spare}</td><td>${remaining}</td><td><span class="pct-txt" style="color:${col}">${pct.toFixed(1)}%</span><span class="bar"><i style="width:${fill}%;background:${col}"></i></span></td></tr></tbody></table></div>`;
   }
 
+  /* ════════ NEW SERVICE ENTRY (default page) ════════ */
   const DEALERS=["A.C BANERJEE & SONS","AKAI DISTRIBUTORS","AKAI ELECTRONICS","ANANDA WATCH CO.","ASHALATA WATCH","BANIK WATCH","BASAK RADIO & WATCH","BERIWAL DISTRIBUTOR","BISHNU WATCH CO","BUNTY WATCH CO","CALCUTTA WATCH TRADING CO","CAPITAL WATCH CO. (DHP)","CHATTERJEE WATCH CO.","EASTERN WATCH CO.","FASHION SQUARE","GANESH WATCH CO","GHARI HOUSE","GHARI MAHAL ( BLG)","GHARI MAHAL (MLD)","GUPTA ELECTRONICS","GUPTA WATCH CO.","HIND WATCH CO.","HIND WATCH CO. (RAI)","JANATA WATCH CO.","JAY GURU TIME CO.","KOHINOOR WATCH MAKERS","LITON WATCH CO","M.B. WATCH ENTERPRISE","M/s B.ROY","M/S SONY TIMES","MANGALDEEP","MAPLE WATCH WORLD","MAYA WATCH CO","MAZUMDAR WATCH","MODERN WATCH CO","MUKUL WATCH CO","NEW GENEVA WATCH CO.","NEW RATAN WATCH CO.","NEW RUBY WATCH","NEW TIME AND SOUND","NORTH BENGAL WATCH & ELECTRICALS","ORIENT GLOBAL PVT LTD(RAI)","ORIENT GLOBAL PVT.LTD.(ALP)","ORIENT WATCH & RADIO CO","PANDIT SUDAMA MISHRA","PAUL BROTHER","PAUL WATCH CO","POPULAR WATCH CO.","PRANAB & BROTHERS","PRISTINE","PURANMAL RADHAKISHAN","RAHUL ENTERPRISE","RAJ KUMARI DEVI","RAJ WATCH CO (SLG)","RAJ WATCH CO.","REGENT WATCH CO.","ROYAL WATCH CO (SLG)","ROYAL'S COLLECTION","RUBY WATCH CO (D)","SAHA ELECTRONICS","SAHA WATCH CO.","SARKAR WATCH CENTRE","SARWAN WATCH CENTER","SIDARTH COMMUNICATION","SINGTAM WATCH HOUSE","SOUMIK ENTERPRISE","SRI KRISHNA WATCH CO.","STYLO","SWISS WATCH CO","THE MAPLE","TIME CENTRE","TIME HOUSE","TIME HOUSE (MATIGARA)","TIME HOUSE & OPTICALS","TIME KING","TIME MONARCH","UNION ENTERPRISE","WATCH AND OPTIC CENTRE"];
   const SALES=["SAMARENDRA CHANDRA SARKA","AJAY SINGHA","SOMEN DAS","CHANDAN DAS"];
   function rVal(id){return document.getElementById(id).value.trim();}
@@ -441,11 +555,11 @@
     const d=new Date();
     document.getElementById("todayDate").textContent=d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"long",year:"numeric"});
     document.getElementById("svcInput").addEventListener("keypress",e=>{if(e.key==="Enter")searchService();});
-    document.getElementById("svcInput").focus();
     document.getElementById("rJob").value=JOB_PREFIX;
     document.getElementById("rDate").value=new Date().toISOString().slice(0,10);
     var dl=document.getElementById('rDealerList'); DEALERS.forEach(function(x){var o=document.createElement('option');o.value=x;dl.appendChild(o);});
     var sl=document.getElementById('rSalesList'); SALES.forEach(function(x){var o=document.createElement('option');o.value=x;sl.appendChild(o);});
+    document.getElementById('rSrf').focus();
   });
 </script>
 </body>
