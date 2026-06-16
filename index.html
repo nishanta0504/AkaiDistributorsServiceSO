@@ -514,7 +514,7 @@
       tvaWatch=data; clearStatus("tva");
       if(!data){renderTVAEmpty();return;}
       tvaMode="watches"; renderTVA();
-      jsonp(TVA_URL,{fn:"logSearch",arg:String(code),dealer:(data.dealer||"")},function(){});
+      jsonp(TVA_URL,{fn:"logSearch",arg:String(code),dealer:(data.dealer||""),site:"2"},function(){});
     });
   }
   function switchMode(mode){
