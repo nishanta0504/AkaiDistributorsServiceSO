@@ -78,7 +78,17 @@
   .name-opt.selected{background:#e3e6ea;}
   .name-opt small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px;}
 
-  /* STATUS */
+  /* SO SUMMARY CARD (sum across all matching dealers) */
+  .so-summary-card{background:linear-gradient(150deg,var(--slate-2) 0%,var(--slate-dk) 100%);border-radius:var(--rad-xl);padding:22px 24px;margin-bottom:26px;position:relative;overflow:hidden;}
+  .so-summary-label{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--amber);margin-bottom:14px;}
+  .so-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .so-summary-cell{background:rgba(255,255,255,.06);border-radius:var(--rad-md);padding:14px 16px;}
+  .so-summary-cell span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.45);margin-bottom:6px;font-weight:700;}
+  .so-summary-cell b{font-size:20px;color:#fff;font-weight:800;font-family:'Playfair Display',serif;}
+  .so-summary-cell b.amber{color:var(--amber);}
+  .so-summary-count{font-size:11.5px;color:rgba(255,255,255,.4);margin-top:13px;}
+
+
   .status-strip{display:none;align-items:center;gap:11px;padding:12px 16px;border-radius:var(--rad-md);font-size:13px;font-weight:500;margin-bottom:18px;border:1px solid transparent;}
   .status-strip.loading{display:flex;background:var(--amber-soft);color:var(--amber-dk);border-color:rgba(227,165,46,.3);}
   .status-strip.error{display:flex;background:#fbeeec;color:#b04339;border-color:rgba(189,81,71,.2);}
@@ -196,7 +206,7 @@
     </button>
     <span id="topWing"></span>
     <div class="topbar-text">
-      <div class="topbar-name">AKAI Distributors SO</div>
+      <div class="topbar-name">AKAI Distributors</div>
       <div class="topbar-sub" id="pageSub">New Service Entry</div>
     </div>
   </div>
@@ -207,7 +217,7 @@
 <nav class="panel" id="panel">
   <div class="panel-head">
     <span id="panelWing"></span>
-    <div class="panel-title">AKAI Distributors SO</div>
+    <div class="panel-title">AKAI Distributors</div>
   </div>
   <div class="panel-cap">Pages</div>
   <div class="nav-link active" data-page="receipt">
@@ -311,6 +321,8 @@
     <div class="name-drop-panel" id="tvaDrop">
       <div class="ndp-label">Matching Dealers</div>
     </div>
+
+    <div id="tvaSummaryCard"></div>
 
     <div class="status-strip" id="tvaStatus"><div class="spinner" id="tvaSpinner"></div><span id="tvaStatusMsg">Searching…</span></div>
     <div id="tvaResults"></div>
@@ -454,6 +466,7 @@
       tvaDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`;
       nameMatches=[]; hiIndex=-1; selectedIndex=-1;
       lastSearchedQuery="";
+      document.getElementById("tvaSummaryCard").innerHTML="";
     }
     // if the box is emptied entirely, also clear the results below
     if(q.length<1){
@@ -483,6 +496,23 @@
     jsonp(TVA_URL,{fn:"searchNames",arg:q},function(list){
       nameMatches=list||[]; hiIndex=-1; selectedIndex=-1; lastSearchedQuery=q; renderDrop();
     });
+    jsonp(TVA_URL,{fn:"getSummaryForNames",arg:q},function(summary){
+      renderSoSummary(summary);
+    });
+  }
+
+  function renderSoSummary(summary){
+    const el=document.getElementById("tvaSummaryCard");
+    if(!summary || !summary.count){ el.innerHTML=""; return; }
+    el.innerHTML=`<div class="so-summary-card">
+      <div class="so-summary-label">SO Summary — All Matching Dealers</div>
+      <div class="so-summary-grid">
+        <div class="so-summary-cell"><span>SO Target</span><b>${summary.target}</b></div>
+        <div class="so-summary-cell"><span>SO Achieved</span><b class="amber">${summary.achieved}</b></div>
+        <div class="so-summary-cell"><span>SO Balance</span><b>${summary.balance}</b></div>
+      </div>
+      <div class="so-summary-count">Across ${summary.count} matching dealer${summary.count>1?'s':''}</div>
+    </div>`;
   }
 
   function renderDrop(){
@@ -514,7 +544,7 @@
       tvaWatch=data; clearStatus("tva");
       if(!data){renderTVAEmpty();return;}
       tvaMode="watches"; renderTVA();
-      jsonp(TVA_URL,{fn:"logSearch",arg:String(code),dealer:(data.dealer||""),site:"2"},function(){});
+      // logSearch intentionally not called from this site
     });
   }
   function switchMode(mode){
