@@ -237,6 +237,10 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
     Target Vs Achievement
   </div>
+  <div class="nav-link" data-page="abm">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>
+    ABM Target
+  </div>
 </nav>
 
 <!-- ══════════ PAGE: NEW SERVICE ENTRY (default) ══════════ -->
@@ -334,6 +338,40 @@
   </div>
 </div>
 
+<!-- ══════════ PAGE: ABM TARGET ══════════ -->
+<div class="page" id="page-abm">
+  <div class="content">
+    <div class="lookup-card">
+      <div class="eyebrow">Performance Dashboard</div>
+      <div class="lookup-heading serif">ABM <em>Target</em></div>
+      <div class="lookup-sub">Type the ABM name to see every dealer under that ABM.</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <div class="input-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <input type="text" id="abmInput" class="srf-input" placeholder="Type ABM name…" autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn-lookup" onclick="manualSearchABM()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Look Up
+        </button>
+      </div>
+      <div class="hint-line">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Type the ABM name and press Enter or Look Up to see matching dealers below
+      </div>
+    </div>
+
+    <div class="name-drop-panel" id="abmDrop">
+      <div class="ndp-label">Matching Dealers</div>
+    </div>
+
+    <div id="abmSummaryCard"></div>
+
+    <div class="status-strip" id="abmStatus"><div class="spinner" id="abmSpinner"></div><span id="abmStatusMsg">Searching…</span></div>
+    <div id="abmResults"></div>
+  </div>
+</div>
+
 <script>
   function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
   function num(v){if(!v)return 0;return Number(String(v).replace(/,/g,""))||0;}
@@ -381,7 +419,7 @@
       this.classList.add("active");
       document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
       document.getElementById("page-"+page).classList.add("active");
-      document.getElementById("pageSub").textContent=(page==="tva")?"Target Vs Achievement":(page==="srf")?"Service Query":"New Service Entry";
+      document.getElementById("pageSub").textContent=(page==="tva")?"Target Vs Achievement":(page==="srf")?"Service Query":(page==="abm")?"ABM Target":"New Service Entry";
       closePanel();
       if(page==="tva" && !tvaMonthLoaded) loadMonth();
     });
@@ -604,6 +642,111 @@
     const ach=batt+spare; const remaining=target-ach; const pct=target?(ach/target*100):0;
     const col=pctColor(pct); const fill=Math.min(Math.abs(pct),100).toFixed(0);
     return `<div class="tbl-wrap"><table class="tva"><thead><tr><th>Target</th><th>Battery Achvd</th><th>Spares Achvd</th><th>Remaining</th><th>%</th></tr></thead><tbody><tr><td style="text-align:center;font-weight:700">${target}</td><td>${batt}</td><td>${spare}</td><td>${remaining}</td><td><span class="pct-txt" style="color:${col}">${pct.toFixed(1)}%</span><span class="bar"><i style="width:${fill}%;background:${col}"></i></span></td></tr></tbody></table></div>`;
+  }
+
+  /* ════════ PAGE: ABM TARGET ════════ */
+  // Typing the GOLD-ABM's name (e.g. "Sonu") lists every dealer whose
+  // column E in "Tgt Vs Achvd" = GOLD. Typing the NON/STAR-ABM's name
+  // (e.g. "Animesh") lists every dealer whose column E = NON or STAR.
+  // Selecting a dealer reuses the same getDataByRow data + watchesTable
+  // formatting as the Target Vs Achievement page, and the summary card
+  // mirrors the SO Summary card (ABM Target / ABM Achieved / ABM Balance).
+  let abmWatch=null, abmCode="";
+  let abmMatches=[], abmHiIndex=-1, abmSelectedIndex=-1;
+  let lastSearchedABMQuery="";
+
+  const abmInput=document.getElementById("abmInput"), abmDrop=document.getElementById("abmDrop");
+  abmInput.addEventListener("input",function(){
+    const q=abmInput.value.trim();
+    if(q.length<1 || q!==lastSearchedABMQuery){
+      abmDrop.classList.remove("open");
+      abmDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`;
+      abmMatches=[]; abmHiIndex=-1; abmSelectedIndex=-1;
+      lastSearchedABMQuery="";
+      document.getElementById("abmSummaryCard").innerHTML="";
+    }
+    if(q.length<1){
+      document.getElementById("abmResults").innerHTML="";
+      clearStatus("abm");
+      abmWatch=null; abmCode="";
+    }
+  });
+  abmInput.addEventListener("keydown",function(e){
+    if(e.key==="Enter"){
+      e.preventDefault();
+      if(abmDrop.classList.contains("open")){
+        if(abmHiIndex>=0&&abmMatches[abmHiIndex]) pickABMName(abmHiIndex);
+      } else {
+        runABMSearch();
+      }
+      return;
+    }
+    if(!abmDrop.classList.contains("open"))return;
+    if(e.key==="ArrowDown"){e.preventDefault();abmHiIndex=Math.min(abmHiIndex+1,abmMatches.length-1);renderABMDrop();}
+    else if(e.key==="ArrowUp"){e.preventDefault();abmHiIndex=Math.max(abmHiIndex-1,0);renderABMDrop();}
+  });
+  function runABMSearch(){
+    const q=abmInput.value.trim();
+    if(q.length<1) return;
+    if(!isSet(TVA_URL)){setStatus("abm","error","Configuration error: TVA_URL not set in the file.");return;}
+    jsonp(TVA_URL,{fn:"searchABM",arg:q},function(list){
+      abmMatches=list||[]; abmHiIndex=-1; abmSelectedIndex=-1; lastSearchedABMQuery=q; renderABMDrop();
+    });
+    jsonp(TVA_URL,{fn:"getSummaryForABM",arg:q},function(summary){
+      renderAbmSummary(summary);
+    });
+  }
+  function renderAbmSummary(summary){
+    const el=document.getElementById("abmSummaryCard");
+    if(!summary || !summary.count){ el.innerHTML=""; return; }
+    el.innerHTML=`<div class="so-summary-card">
+      <div class="so-summary-label">ABM Summary — All Matching Dealers</div>
+      <div class="so-summary-grid">
+        <div class="so-summary-cell"><span>ABM Target</span><b>${fmtINR(summary.target)}</b></div>
+        <div class="so-summary-cell"><span>ABM Achieved</span><b class="amber">${fmtINR(summary.achieved)}</b></div>
+        <div class="so-summary-cell"><span>ABM Balance</span><b>${fmtINR(summary.balance)}</b></div>
+      </div>
+      <div class="so-summary-count">Across ${summary.count} matching dealer${summary.count>1?'s':''}</div>
+    </div>`;
+  }
+  function renderABMDrop(){
+    if(!abmMatches.length){
+      abmDrop.classList.remove("open");
+      abmDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`;
+      return;
+    }
+    abmDrop.innerHTML=`<div class="ndp-label">Matching Dealers</div>`+
+      abmMatches.map((m,i)=>`<div class="name-opt ${i===abmHiIndex?'hi':''} ${i===abmSelectedIndex?'selected':''}" onclick="pickABMName(${i})">${esc(m.name)}<small>Code: ${esc(m.code)}${m.town?' • '+esc(m.town):''}</small></div>`).join("");
+    abmDrop.classList.add("open");
+  }
+  function pickABMName(i){
+    const m=abmMatches[i]; if(!m)return;
+    abmSelectedIndex=i;
+    renderABMDrop();
+    loadABMRow(m.row,m.code);
+  }
+  function manualSearchABM(){
+    if(abmDrop.classList.contains("open") && abmMatches.length){ pickABMName(abmHiIndex>=0?abmHiIndex:0); }
+    else { runABMSearch(); }
+  }
+  function loadABMRow(row,code){
+    abmCode=code; abmWatch=null;
+    setStatus("abm","loading","Loading data…");
+    document.getElementById("abmResults").innerHTML="";
+    jsonp(TVA_URL,{fn:"getDataByRow",arg:String(row)},function(data){
+      abmWatch=data; clearStatus("abm");
+      if(!data){renderABMEmpty();return;}
+      renderABM();
+    });
+  }
+  function renderABMEmpty(){
+    document.getElementById("abmResults").innerHTML=`<div class="empty-state"><div class="empty-icon-wrap"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="empty-title serif">No Data Found</div><div class="empty-sub">No record matches that selection. Please try another ABM name.</div></div>`;
+  }
+  function renderABM(){
+    const base=abmWatch; if(!base){renderABMEmpty();return;}
+    const body=watchesTable(base);
+    const meta=`<div class="results-meta"><div class="results-label">ABM Target Vs Achievement</div><span class="srf-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>${esc(abmCode)}</span></div>`;
+    document.getElementById("abmResults").innerHTML=meta+`<div class="result-card">${dealerStrip(base)}${body}<div class="disclaimer">Disclaimer: data is entered manually and may vary.</div></div>`;
   }
 
   /* ════════ PAGE: NEW SERVICE ENTRY ════════ */
